@@ -2,10 +2,11 @@ package co.kr.view;
 
 import co.kr.model.RecommendTime;
 import co.kr.model.Weather;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class InputView {
@@ -17,22 +18,16 @@ public class InputView {
     }
 
     public int getOption() {
-        System.out.print(
-                """
-                        == 랜덤 점심 메뉴 추천기 ==
-                        1. 메뉴 추천받기
-                        2. 전체 메뉴 보기
-                        0. 종료
-                        선택:\s""");
+        System.out.print(InputText.CHOOSE_OPTION.getText());
         return Integer.parseInt(scanner.nextLine());
     }
 
     public String getWeather() {
         String weatherList = Arrays.stream(Weather.values())
                 .map(Weather::getName)
-                .collect(Collectors.joining(","));
+                .collect(getJoining());
 
-        System.out.printf("날씨 입력 (%s): ", weatherList);
+        System.out.printf(InputText.GET_WEATHER.getText(), weatherList);
 
         return scanner.nextLine();
     }
@@ -40,16 +35,16 @@ public class InputView {
     public String getTime() {
         String timeList = Arrays.stream(RecommendTime.values())
                 .map(RecommendTime::getName)
-                .collect(Collectors.joining(","));
+                .collect(getJoining());
 
-        System.out.printf("시간대 입력 (%s): ", timeList);
+        System.out.printf(InputText.GET_RECOMMEND_TIME.getText(), timeList);
 
         return scanner.nextLine();
     }
 
-    private String getString(List<String> values) {
-        return String.join(", ", values);
-
+    @NotNull
+    private Collector<CharSequence, ?, String> getJoining() {
+        return Collectors.joining(InputText.DELIMITER.getText());
     }
 
     public void closeScanner() {

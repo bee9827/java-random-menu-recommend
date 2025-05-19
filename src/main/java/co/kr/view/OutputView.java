@@ -6,24 +6,24 @@ import java.util.List;
 
 public class OutputView {
 
-    public void printError(RuntimeException runtimeException){
+    public void printError(RuntimeException runtimeException) {
         System.out.println();
         System.out.println(runtimeException.getMessage());
     }
 
-    public void printRecommend(Menu menu){
+    public void printRecommend(Menu menu) {
         System.out.println();
-        System.out.printf("오늘 추천 메뉴는: %s%n",menu.getName());
+        System.out.printf(OutputText.RECOMMEND_MENU.getText(), menu.getName());
         printMenu(menu);
     }
 
     private void printMenu(Menu menu) {
-        System.out.printf("이름: %s | 시간대: %s | 날씨: %s %n", menu.getName(), menu.getRecommendTime().toString(), menu.getWeather().toString());
+        System.out.printf(OutputText.MENU_DETAIL.getText(), menu.getName(), menu.getRecommendTime().toString(), menu.getWeather().toString());
     }
 
     public void printAllMenus(List<Menu> allMenus) {
-        System.out.println("전체 메뉴 목록:");
-        for(Menu menu : allMenus){
+        System.out.println(OutputText.ALL_MENU.getText());
+        for (Menu menu : allMenus) {
             printMenu(menu);
         }
     }
