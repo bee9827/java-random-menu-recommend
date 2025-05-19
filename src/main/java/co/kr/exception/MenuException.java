@@ -5,7 +5,8 @@ import java.util.function.Supplier;
 public enum MenuException {
     NOT_FOUND_RECOMMEND_TIME(new IllegalArgumentException("시간대에 맞는 메뉴가 없습니다.")),
     NOT_FOUND_WEATHER(new IllegalArgumentException("날씨에 맞는 메뉴가 없습니다.")),
-    NOT_FOUND_MENU(new IllegalStateException("조건에 맞는 메뉴가 없습니다."));
+    NOT_FOUND_MENU(new IllegalStateException("조건에 맞는 메뉴가 없습니다.")),
+    NOT_EXIST_OPTION(new IllegalArgumentException("보기에 없는 값입니다."));
 
 
     private final RuntimeException runtimeException;

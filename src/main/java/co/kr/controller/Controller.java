@@ -5,52 +5,56 @@ import co.kr.model.MenuService;
 import co.kr.model.RecommendTime;
 import co.kr.model.Weather;
 import co.kr.view.InputView;
+import co.kr.view.InputOption;
 import co.kr.view.OutputView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller {
     private final InputView inputView;
     private final OutputView outputView;
     private final MenuService menuService;
+    Map<InputOption, Runnable> functions;
 
     public Controller(InputView inputView, OutputView outputView, MenuService menuService) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.menuService = menuService;
+
+        functions = getFunctions();
     }
 
-    public void start(){
+    private Map<InputOption, Runnable> getFunctions() {
+        Map<InputOption, Runnable> functions = new HashMap<>();
+        functions.put(InputOption.GET_RECOMMEND, this::getRecommendMenu);
+        functions.put(InputOption.GET_ALL_MENUS, this::printAllMenus);
 
-        while (true){
-            int option = inputView.getOption();
-            if(option == 1){
-                getRecommendMenu();
-            }
-            else if(option == 2){
-                printAllMenus();
-            }
-            else if(option == 0){
-                break;
+        return functions;
+    }
+
+    public void start() {
+        InputOption selected;
+        while ((selected = inputView.getOption()) != InputOption.EXIT) {
+            try {
+                functions.get(selected).run();
+            } catch (RuntimeException e) {
+                outputView.printError(e);
             }
         }
 
-        inputView.closeScanner();
     }
 
-    public void getRecommendMenu(){
-        try {
-            RecommendTime recommendTime = RecommendTime.from(inputView.getTime());
-            Weather weather = Weather.from(inputView.getWeather());
+    public void getRecommendMenu() {
+        RecommendTime recommendTime = inputView.getRecommendTime();
+        Weather weather = inputView.getWeather();
 
-            Menu recommendMenu = menuService.recommend(recommendTime, weather);
-            outputView.printRecommend(recommendMenu);
-        }catch (RuntimeException e){
-            outputView.printError(e);
-        }
+        Menu recommendMenu = menuService.recommend(recommendTime, weather);
+        outputView.printRecommend(recommendMenu);
     }
 
-    public void printAllMenus(){
+    public void printAllMenus() {
         outputView.printAllMenus(menuService.getAllMenus());
     }
-
 
 }

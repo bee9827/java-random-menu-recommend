@@ -5,8 +5,6 @@ public enum OutputText {
     MENU_DETAIL("이름: %s | 시간대: %s | 날씨: %s %n"),
     ALL_MENU("전체 메뉴 목록:");
 
-
-
     private final String text;
 
     OutputText(String text) {

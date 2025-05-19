@@ -2,12 +2,10 @@ package co.kr.view;
 
 import co.kr.model.RecommendTime;
 import co.kr.model.Weather;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class InputView {
     private final Scanner scanner;
@@ -17,34 +15,29 @@ public class InputView {
         scanner = new Scanner(System.in);
     }
 
-    public int getOption() {
-        System.out.print(InputText.CHOOSE_OPTION.getText());
-        return Integer.parseInt(scanner.nextLine());
+    public InputOption getOption() {
+        System.out.print(InputText.SELECT_OPTION.getFormedText(InputOption.getAllText()));
+        return InputOption.fromValue(Integer.parseInt(scanner.nextLine()));
     }
 
-    public String getWeather() {
-        String weatherList = Arrays.stream(Weather.values())
+    public Weather getWeather() {
+        List<String> weatherList = Arrays.stream(Weather.values())
                 .map(Weather::getName)
-                .collect(getJoining());
+                .toList();
 
-        System.out.printf(InputText.GET_WEATHER.getText(), weatherList);
+        System.out.print(InputText.GET_WEATHER.getFormedText(weatherList));
 
-        return scanner.nextLine();
+        return Weather.from(scanner.nextLine());
     }
 
-    public String getTime() {
-        String timeList = Arrays.stream(RecommendTime.values())
+    public RecommendTime getRecommendTime() {
+        List<String> recommendTimeList = Arrays.stream(RecommendTime.values())
                 .map(RecommendTime::getName)
-                .collect(getJoining());
+                .toList();
 
-        System.out.printf(InputText.GET_RECOMMEND_TIME.getText(), timeList);
+        System.out.print(InputText.GET_RECOMMEND_TIME.getFormedText(recommendTimeList));
 
-        return scanner.nextLine();
-    }
-
-    @NotNull
-    private Collector<CharSequence, ?, String> getJoining() {
-        return Collectors.joining(InputText.DELIMITER.getText());
+        return RecommendTime.from(scanner.nextLine());
     }
 
     public void closeScanner() {
