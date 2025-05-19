@@ -43,7 +43,7 @@ public class Controller {
 
             Menu recommendMenu = menuService.recommend(recommendTime, weather);
             outputView.printRecommend(recommendMenu);
-        }catch (IllegalArgumentException e){
+        }catch (RuntimeException e){
             outputView.printError(e);
         }
     }

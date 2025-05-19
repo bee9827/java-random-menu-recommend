@@ -1,5 +1,7 @@
 package co.kr.model;
 
+import co.kr.exception.MenuException;
+
 import java.util.Arrays;
 
 public enum Weather {
@@ -19,7 +21,7 @@ public enum Weather {
         return Arrays.stream(Weather.values())
                 .filter(weather -> weather.name.equals(name))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("날씨에 맞는 메뉴가 없습니다."));
+                .orElseThrow(MenuException.NOT_FOUND_WEATHER.getExceptionSupplier());
     }
 
     public String getName() {

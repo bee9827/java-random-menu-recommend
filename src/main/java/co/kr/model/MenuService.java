@@ -1,5 +1,6 @@
 package co.kr.model;
 
+import co.kr.exception.MenuException;
 import co.kr.util.MyRandom;
 
 import java.util.List;
@@ -14,11 +15,16 @@ public class MenuService {
 
     // 요구사항중에 여러개가 나올 경우 랜덤을 해야 합니다. 해당 요구사항이 충족되지 않았습니다.
     public Menu recommend(RecommendTime recommendTime, Weather weather) {
+        Random rand = MyRandom.getInstance();
+
         List<Menu> recommendedMenus = menuRepository.getAll().stream()
                 .filter(menu -> menu.equals(recommendTime, weather))
                 .toList();
 
-        Random rand = MyRandom.getInstance();
+        if (recommendedMenus.isEmpty()) {
+            throw MenuException.NOT_FOUND_MENU.getRuntimeException();
+        }
+
         return recommendedMenus.get(rand.nextInt(recommendedMenus.size()));
     }
 

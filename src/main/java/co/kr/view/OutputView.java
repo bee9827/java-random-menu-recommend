@@ -6,9 +6,9 @@ import java.util.List;
 
 public class OutputView {
 
-    public void printError(IllegalArgumentException illegalArgumentException){
+    public void printError(RuntimeException runtimeException){
         System.out.println();
-        System.out.println(illegalArgumentException.getMessage());
+        System.out.println(runtimeException.getMessage());
     }
 
     public void printRecommend(Menu menu){

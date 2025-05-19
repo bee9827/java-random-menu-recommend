@@ -1,5 +1,7 @@
 package co.kr.model;
 
+import co.kr.exception.MenuException;
+
 import java.util.Arrays;
 
 public enum RecommendTime {
@@ -18,7 +20,7 @@ public enum RecommendTime {
         return Arrays.stream(RecommendTime.values())
                 .filter(recommendTime -> recommendTime.name.equals(name))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("시간대에 맞는 메뉴가 없습니다."));
+                .orElseThrow(MenuException.NOT_FOUND_RECOMMEND_TIME.getExceptionSupplier());
     }
 
     public String getName() {
