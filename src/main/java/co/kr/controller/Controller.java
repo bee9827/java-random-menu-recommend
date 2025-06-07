@@ -34,7 +34,7 @@ public class Controller {
 
     public void start() {
         InputOption selected;
-        //첫 입력이 잘못되면 다시 실행하지 않는다.
+        //옵션 선택이 잘못되면 다시 실행하지 않는다. -> 개선 필요
         while ((selected = inputView.getOption()) != InputOption.EXIT) {
             try {
                 inputHandler.get(selected).run();
@@ -43,6 +43,11 @@ public class Controller {
             }
         }
 
+        inputView.closeScanner();
+    }
+
+    public void printAllMenus() {
+        outputView.printAllMenus(menuService.getAllMenus());
     }
 
     public void getRecommendMenu() {
@@ -50,10 +55,6 @@ public class Controller {
         Menu recommendMenu = menuService.recommend(recommendDto);
 
         outputView.printRecommend(recommendMenu);
-    }
-
-    public void printAllMenus() {
-        outputView.printAllMenus(menuService.getAllMenus());
     }
 
     public void addMenu() {

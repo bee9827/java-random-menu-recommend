@@ -36,7 +36,7 @@ public class InputView {
         return new Menu(name, recommendTime, weather, tag);
     }
 
-    public Set<String> getTags() {
+    private Set<String> getTags() {
         System.out.print(InputText.GET_TAG.getText());
         String tags = scanner.nextLine();
 
@@ -50,7 +50,7 @@ public class InputView {
         return scanner.nextLine();
     }
 
-    public Weather getWeather() {
+    private Weather getWeather() {
         List<String> weatherList = Arrays.stream(Weather.values())
                 .map(Weather::getName)
                 .toList();
@@ -60,7 +60,7 @@ public class InputView {
         return Weather.from(scanner.nextLine());
     }
 
-    public RecommendTime getRecommendTime() {
+    private RecommendTime getRecommendTime() {
         List<String> recommendTimeList = Arrays.stream(RecommendTime.values())
                 .map(RecommendTime::getName)
                 .toList();
@@ -68,17 +68,6 @@ public class InputView {
         System.out.print(InputText.GET_RECOMMEND_TIME.getFormedText(recommendTimeList));
 
         return RecommendTime.from(scanner.nextLine());
-    }
-
-    private <T extends Enum<T>> T getEnumInput(String prompt, Function<String, T> parser) {
-        while (true) {
-            try {
-                System.out.print(prompt);
-                return parser.apply(scanner.nextLine());
-            } catch (IllegalArgumentException e) {
-                System.out.println("올바른 값을 입력해주세요.");
-            }
-        }
     }
 
     public void closeScanner() {

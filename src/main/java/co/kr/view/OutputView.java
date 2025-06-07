@@ -3,7 +3,6 @@ package co.kr.view;
 import co.kr.model.Menu;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OutputView {
 
