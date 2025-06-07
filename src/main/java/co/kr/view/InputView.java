@@ -1,5 +1,6 @@
 package co.kr.view;
 
+import co.kr.exception.MenuException;
 import co.kr.model.Menu;
 import co.kr.model.RecommendTime;
 import co.kr.model.Weather;
@@ -8,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class InputView {
@@ -21,11 +21,12 @@ public class InputView {
 
     public InputOption getOption() {
         System.out.print(InputText.SELECT_OPTION.getFormedText(InputOption.getAllText()));
-        return InputOption.fromValue(Integer.parseInt(scanner.nextLine()));
+        return InputOption.fromValue(parseInt(scanner.nextLine()));
     }
 
+
     public RecommendDto getRecommend() {
-        return new RecommendDto(getRecommendTime(),getWeather(),getTags());
+        return new RecommendDto(getRecommendTime(), getWeather(), getTags());
     }
 
     public Menu getMenu() {
@@ -72,6 +73,14 @@ public class InputView {
 
     public void closeScanner() {
         scanner.close();
+    }
+
+    private Integer parseInt(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            throw MenuException.NUMBER_FORMAT_EXCEPTION.getRuntimeException();
+        }
     }
 
 }

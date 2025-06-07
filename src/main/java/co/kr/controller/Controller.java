@@ -9,6 +9,7 @@ import co.kr.view.RecommendDto;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class Controller {
     private final InputView inputView;
@@ -24,25 +25,8 @@ public class Controller {
         inputHandler = getInputHandler();
     }
 
-    private Map<InputOption, Runnable> getInputHandler() {
-        Map<InputOption, Runnable> handler = new HashMap<>();
-        handler.put(InputOption.GET_RECOMMEND, this::getRecommendMenu);
-        handler.put(InputOption.GET_ALL_MENUS, this::printAllMenus);
-        handler.put(InputOption.ADD_MENU, this::addMenu);
-        return handler;
-    }
-
     public void start() {
-        InputOption selected;
-        //옵션 선택이 잘못되면 다시 실행하지 않는다. -> 개선 필요
-        while ((selected = inputView.getOption()) != InputOption.EXIT) {
-            try {
-                inputHandler.get(selected).run();
-            } catch (RuntimeException e) {
-                outputView.printError(e);
-            }
-        }
-
+        retryWithNoException(() -> handleOption(inputView.getOption()));
         inputView.closeScanner();
     }
 
@@ -62,4 +46,31 @@ public class Controller {
         outputView.printMenu(savedMenu);
     }
 
+    public void exit() {
+        inputView.closeScanner();
+        System.exit(0);
+    }
+
+    public void handleOption(InputOption selectedOption) {
+        inputHandler.get(selectedOption).run();
+    }
+
+    private void retryWithNoException(Runnable runnable) {
+        while (true) {
+            try {
+                runnable.run();
+            } catch (RuntimeException e) {
+                outputView.printError(e);
+            }
+        }
+    }
+
+    private Map<InputOption, Runnable> getInputHandler() {
+        Map<InputOption, Runnable> handler = new HashMap<>();
+        handler.put(InputOption.GET_RECOMMEND, this::getRecommendMenu);
+        handler.put(InputOption.GET_ALL_MENUS, this::printAllMenus);
+        handler.put(InputOption.ADD_MENU, this::addMenu);
+        handler.put(InputOption.EXIT, this::exit);
+        return handler;
+    }
 }
