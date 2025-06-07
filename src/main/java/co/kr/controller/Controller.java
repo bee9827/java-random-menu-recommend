@@ -2,11 +2,10 @@ package co.kr.controller;
 
 import co.kr.model.Menu;
 import co.kr.model.MenuService;
-import co.kr.model.RecommendTime;
-import co.kr.model.Weather;
 import co.kr.view.InputOption;
 import co.kr.view.InputView;
 import co.kr.view.OutputView;
+import co.kr.view.RecommendDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class Controller {
         Map<InputOption, Runnable> handler = new HashMap<>();
         handler.put(InputOption.GET_RECOMMEND, this::getRecommendMenu);
         handler.put(InputOption.GET_ALL_MENUS, this::printAllMenus);
-
+        handler.put(InputOption.ADD_MENU, this::addMenu);
         return handler;
     }
 
@@ -47,15 +46,19 @@ public class Controller {
     }
 
     public void getRecommendMenu() {
-        RecommendTime recommendTime = inputView.getRecommendTime();
-        Weather weather = inputView.getWeather();
+        RecommendDto recommendDto = inputView.getRecommend();
+        Menu recommendMenu = menuService.recommend(recommendDto);
 
-        Menu recommendMenu = menuService.recommend(recommendTime, weather);
         outputView.printRecommend(recommendMenu);
     }
 
     public void printAllMenus() {
         outputView.printAllMenus(menuService.getAllMenus());
+    }
+
+    public void addMenu() {
+        Menu savedMenu = menuService.add(inputView.getMenu());
+        outputView.printMenu(savedMenu);
     }
 
 }

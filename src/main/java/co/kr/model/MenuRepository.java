@@ -1,7 +1,9 @@
 package co.kr.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 
 // 왜라는 이유를 찾는것은 어려움
@@ -13,21 +15,19 @@ public class MenuRepository {
     private static final List<Menu> menus = getDefaultMenus();
 
     private static List<Menu> getDefaultMenus() {
-        return Arrays.asList(
-                new Menu("김치찌개", RecommendTime.LUNCH, Weather.CLOUDY),
-                new Menu("비빔밥", RecommendTime.LUNCH, Weather.SUNNY),
-                new Menu("우동", RecommendTime.DINNER, Weather.SNOWY),
-                new Menu("돈까스", RecommendTime.LUNCH, Weather.SUNNY),
-                new Menu("불고기덮밥", RecommendTime.LUNCH, Weather.CLOUDY),
-                new Menu("라면", RecommendTime.LUNCH, Weather.RAINY),
-                new Menu("짬뽕", RecommendTime.LUNCH, Weather.SNOWY),
-                new Menu("샐러드", RecommendTime.LUNCH, Weather.SUNNY),
-                new Menu("떡볶이", RecommendTime.LUNCH, Weather.RAINY),
-                new Menu("치킨", RecommendTime.DINNER, Weather.CLOUDY));
+        List<Menu> menus = new ArrayList<>();
+        menus.addAll(Arrays.asList(
+                new Menu("김치찌개", RecommendTime.LUNCH, Weather.CLOUDY, Set.of("매콤", "김치")),
+                new Menu("비빔밥", RecommendTime.LUNCH, Weather.SUNNY, Set.of("한식")),
+                new Menu("우동", RecommendTime.DINNER, Weather.SNOWY, Set.of("면", "뜨끈")),
+                new Menu("돈까스", RecommendTime.LUNCH, Weather.SUNNY, Set.of("돼지고기"))
+        ));
+
+        return menus;
     }
 
     public List<Menu> getAll() {
-        return menus;
+        return List.copyOf(menus);
     }
 
     public void addAll(List<Menu> addMenus) {

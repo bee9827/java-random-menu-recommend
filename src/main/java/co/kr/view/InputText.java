@@ -9,7 +9,9 @@ public enum InputText {
                     %s
                     선택:\s"""),
     GET_WEATHER("날씨 입력 (%s): "),
-    GET_RECOMMEND_TIME("시간대 입력 (%s): ");
+    GET_RECOMMEND_TIME("시간대 입력 (%s): "),
+    GET_MENU_NAME("이름 입력: "),
+    GET_TAG("태그 입력: ");
 
     private final String text;
 
@@ -21,8 +23,12 @@ public enum InputText {
         return getFormedText(getJoining(list));
     }
 
-    public String getFormedText(String list) {
-        return String.format(text, list);
+    public String getFormedText(String content) {
+        return String.format(text, content);
+    }
+
+    public String getText() {
+        return text;
     }
 
     private String getJoining(List<String> list) {

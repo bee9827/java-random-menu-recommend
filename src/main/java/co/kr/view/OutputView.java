@@ -3,6 +3,7 @@ package co.kr.view;
 import co.kr.model.Menu;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OutputView {
 
@@ -17,8 +18,9 @@ public class OutputView {
         printMenu(menu);
     }
 
-    private void printMenu(Menu menu) {
-        System.out.printf(OutputText.MENU_DETAIL.getText(), menu.getName(), menu.getRecommendTime().toString(), menu.getWeather().toString());
+    public void printMenu(Menu menu) {
+        String tags = String.join(", ", menu.getTags());
+        System.out.printf(OutputText.MENU_DETAIL.getText(), menu.getName(), menu.getRecommendTime().toString(), menu.getWeather().toString(),tags);
     }
 
     public void printAllMenus(List<Menu> allMenus) {

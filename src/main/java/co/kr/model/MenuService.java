@@ -1,10 +1,11 @@
 package co.kr.model;
 
 import co.kr.exception.MenuException;
-import co.kr.util.MyRandom;
+import co.kr.view.RecommendDto;
 
 import java.util.List;
-import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MenuService {
     private final MenuRepository menuRepository;
@@ -13,19 +14,27 @@ public class MenuService {
         this.menuRepository = menuRepository;
     }
 
-    // 요구사항중에 여러개가 나올 경우 랜덤을 해야 합니다. 해당 요구사항이 충족되지 않았습니다.
-    public Menu recommend(RecommendTime recommendTime, Weather weather) {
-        Random rand = MyRandom.getInstance();
+    public Menu add(Menu menu) {
+        menuRepository.add(menu);
+        return menu;
+    }
+
+    public Menu recommend(RecommendDto recommendDto) {
+        return this.recommend(recommendDto.recommendTime(), recommendDto.weather(), recommendDto.tags());
+    }
+
+    public Menu recommend(RecommendTime recommendTime, Weather weather, Set<String> tags) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
 
         List<Menu> recommendedMenus = menuRepository.getAll().stream()
-                .filter(menu -> menu.equals(recommendTime, weather))
+                .filter(menu -> menu.matches(recommendTime, weather, tags))
                 .toList();
 
         if (recommendedMenus.isEmpty()) {
             throw MenuException.NOT_FOUND_MENU.getRuntimeException();
         }
 
-        return recommendedMenus.get(rand.nextInt(recommendedMenus.size()));
+        return recommendedMenus.get(random.nextInt(recommendedMenus.size()));
     }
 
     public List<Menu> getAllMenus() {
